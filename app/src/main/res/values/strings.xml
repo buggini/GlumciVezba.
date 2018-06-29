@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">GlumciVezba</string>
+    <string name="dialog_about_title">About</string>
+    <string name="dialog_about_message">Ova aplikacija prikazuje listu glumaca.</string>
+    <string name="dialog_about_yes">OK</string>
+    <string name="dialog_about_no">Cancel</string>
+
+    <string name="activity_list_toolbar_title">ToolBar Title</string>
+</resources>
