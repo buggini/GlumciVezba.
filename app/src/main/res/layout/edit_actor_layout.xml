@@ -1,31 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_detail"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:title="@string/detail_actor"
-            android:background="?attr/colorControlNormal"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:layout_scrollFlags="scroll|enterAlways" />
-
-
-    </android.support.design.widget.AppBarLayout>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,10 +17,9 @@
             android:text="Name"/>
 
         <EditText
-            android:id="@+id/actor_name"
+            android:id="@+id/actor_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -57,7 +34,7 @@
             android:text="Biography"/>
 
         <EditText
-            android:id="@+id/actor_biography"
+            android:id="@+id/actor_biography_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -75,12 +52,13 @@
             android:text="Rating"/>
 
         <RatingBar
-            android:id="@+id/acrtor_rating"
+            android:id="@+id/actor_rating_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
             android:stepSize="1.0"
             android:rating="0.0"/>
+
 
     </LinearLayout>
 
@@ -93,18 +71,31 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"/>
+            android:text="Birth"/>
 
         <EditText
-            android:id="@+id/actor_birth"
+            android:id="@+id/actor_birth_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/actor_movies"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="5dp"
+        android:gravity="center">
 
+        <Button
+            android:id="@+id/add_actor_btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"/>
+        <Button
+            android:id="@+id/cancel_actor_btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"/>
+    </LinearLayout>
 </LinearLayout>

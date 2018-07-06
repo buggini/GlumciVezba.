@@ -33,6 +33,7 @@ import com.example.fearpally.glumcivezba.R;
 import com.example.fearpally.glumcivezba.db.ORMLightHelper;
 import com.example.fearpally.glumcivezba.db.model.Actor;
 import com.example.fearpally.glumcivezba.dialog.AboutDialog;
+import com.example.fearpally.glumcivezba.preferences.Preferences;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
@@ -53,11 +54,13 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
 
-        if (toolbar != null) {
+        if(toolbar != null) {
             setSupportActionBar(toolbar);
         }
+
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         final ListView listView = (ListView) findViewById(R.id.actor_list);
@@ -152,12 +155,19 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
 
         switch (item.getItemId()){
-            case R.id.add_actor:
+            case R.id.add_new_actor:
 
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.add_actor_layout);
 
-                Button add = (Button)dialog.findViewById(R.id.add_actor);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_actor_btn);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button add = (Button)dialog.findViewById(R.id.add_actor_btn);
                 add.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v){
@@ -187,12 +197,11 @@ public class ListActivity extends AppCompatActivity {
                                 showNotificationMesage("Dodat novi glumac");
                             }
                             refresh();
+                            dialog.dismiss();
 
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-
-                        dialog.dismiss();
 
                     }
                 });
@@ -205,7 +214,7 @@ public class ListActivity extends AppCompatActivity {
                 alertDialog.show();
                 break;
             case R.id.preferences:
-                startActivity(new Intent(ListActivity.this, Preference.class));
+                startActivity(new Intent(ListActivity.this, Preferences.class));
                 break;
         }
         return  super.onOptionsItemSelected(item);

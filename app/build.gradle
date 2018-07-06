@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 24
+    buildToolsVersion '27.0.3'
+
     defaultConfig {
         applicationId "com.example.fearpally.glumcivezba"
-        minSdkVersion 17
-        targetSdkVersion 27
+        minSdkVersion 16
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -16,17 +17,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    testImplementation 'junit:junit:4.12'
-
-
-    implementation 'com.android.support:design:27.1.1'
+//    implementation 'com.android.support:appcompat-v4:24.2.1'-- //v7 bilo
+    implementation 'com.android.support:design:24.1.1' //24.2.1
+    implementation 'com.android.support:appcompat-v7:24.1.1'
 
     //Prvo je potrebno da preuzmemo biblioteku za rad
     implementation 'com.j256.ormlite:ormlite-android:4.48'
 }
+
+
+
+
+

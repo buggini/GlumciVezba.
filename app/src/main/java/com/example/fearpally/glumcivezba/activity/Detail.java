@@ -14,11 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fearpally.glumcivezba.R;
@@ -35,7 +38,6 @@ import static com.example.fearpally.glumcivezba.activity.ListActivity.NOTIF_TOAS
 
 public class Detail extends AppCompatActivity {
 
-
     private ORMLightHelper dataBaseHelper;
     private SharedPreferences sharedPreferences;
     private Actor glumac;
@@ -49,6 +51,12 @@ public class Detail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+//        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+//
+//        if(toolbar != null) {
+//            setSupportActionBar(toolbar);
+//        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -71,6 +79,27 @@ public class Detail extends AppCompatActivity {
             biography.setText(glumac.getmBiography());
             birthday.setText(glumac.getmBirth());
             ratingBar.setRating(glumac.getmScore());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        final ListView listView =(ListView) findViewById(R.id.actor_movies);
+
+        try {
+            List<Movie> list = getDatabaseHelper().getmMovieDao().queryBuilder()
+                    .where()
+                    .eq(Movie.FIELD_NAME_USER, glumac.getMid())
+                    .query();
+
+            ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_item, list);
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Movie movie = (Movie) listView.getItemAtPosition(position);
+                    Toast.makeText(Detail.this,movie.getmName()+" "+movie.getmGenre()+ " "+ movie.getmYear() ,Toast.LENGTH_LONG).show();
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -182,17 +211,17 @@ public class Detail extends AppCompatActivity {
                 break;
             case R.id.edit:
                 final Dialog dialogEdit = new Dialog(this);
-                dialogEdit.setContentView(R.layout.add_actor_layout);
+                dialogEdit.setContentView(R.layout.edit_actor_layout);
 
-                Button edit = (Button) dialogEdit.findViewById(R.id.add_actor_btn);
+                Button edit = (Button) dialogEdit.findViewById(R.id.add_actor_btn_edit);
                 edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        name = (EditText) findViewById(R.id.actor_name);
-                        biography = (EditText) findViewById(R.id.actor_biography);
-                        birthday = (EditText) findViewById(R.id.actor_birth);
-                        ratingBar = (RatingBar) findViewById(R.id.actor_rating);
+                        name = (EditText) findViewById(R.id.actor_name_edit);
+                        biography = (EditText) findViewById(R.id.actor_biography_edit);
+                        birthday = (EditText) findViewById(R.id.actor_birth_edit);
+                        ratingBar = (RatingBar) findViewById(R.id.actor_rating_edit);
 
                         glumac.setmName(name.getText().toString().trim());
                         glumac.setmBiography(biography.getText().toString().trim());
@@ -210,7 +239,7 @@ public class Detail extends AppCompatActivity {
                     }
                 });
 
-                Button cancel = (Button) dialogEdit.findViewById(R.id.cancel_actor_btn);
+                Button cancel = (Button) dialogEdit.findViewById(R.id.cancel_actor_btn_edit);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -221,20 +250,51 @@ public class Detail extends AppCompatActivity {
 
                 break;
             case R.id.remove:
+                    //OVTVARAMO DIALOG ZA UNOS INFORMACIJA
+                final Dialog dialogRemove = new Dialog(this);
+                dialogRemove.setContentView(R.layout.remove_actor_layout);
 
-                try {
-                    getDatabaseHelper().getmActorDao().delete(glumac);
-                    showMessage("Actor Deleted");
+                TextView textView =(TextView) findViewById(R.id.text_dialog);
 
-                    finish();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                Button deleteDialog = (Button) dialogRemove.findViewById(R.id.delete_actor_btn_dialog);
+                deleteDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            getDatabaseHelper().getmActorDao().delete(glumac);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        showMessage("Actor Deleted");
+
+                        finish(); //moramo pozvati da bi se vratili na prethodnu aktivnost
+                    }
+                });
+                Button cancelDialog = (Button) dialogRemove.findViewById(R.id.cancel_actor_btn_dialog);
+                cancelDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogRemove.dismiss();
+
+                        finish(); //moramo pozvati da bi se vratili na prethodnu aktivnost
+                    }
+                });
+                dialogRemove.show();
                 break;
     }
         return super.onOptionsItemSelected(item);
     }
 
-    //245
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //nakon rada sa bazom podataka potrebno je obavezno
+        //oslobodidi resurse!
+
+        if(dataBaseHelper != null){
+            OpenHelperManager.releaseHelper();
+            dataBaseHelper = null;
+        }
+    }
 }
 

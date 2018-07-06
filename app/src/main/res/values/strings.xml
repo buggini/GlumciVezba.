@@ -9,4 +9,8 @@
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="izadji">Izadji</string>
+    <string name="obrisi">Obrisi</string>
+    <string name="izbrisati_ovog_glumca">Izbrisati ovog glumca?</string>
+    <string name="detail_actor">Detail Actor</string>
 </resources>
